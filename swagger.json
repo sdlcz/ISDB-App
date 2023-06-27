@@ -1,0 +1,640 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "ISDB - API",
+        "description": "API which provides access to a database collection which includes more than 3000 tracks from 300+ albums.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3001",
+            "description": "Local development URL"
+        }, 
+        {
+            "url": "https://deploy-isdb.herokuapp.com/",
+            "description": "Production site / deployment site"
+        }
+    ],
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Authentication operations"
+        },
+        {
+            "name": "albums",
+            "description": "Album operations"
+        },
+        {
+            "name": "artists",
+            "description": "Artist operations"
+        },
+        {
+            "name": "genres",
+            "description": "Genres operations"
+        },
+        {
+            "name": "tracks",
+            "description": "Tracks operations"
+        },
+        {
+            "name": "users",
+            "description": "User operations include login and registration"
+        }
+    ],
+    "externalDocs":  { 
+            "description": "Gihub ReadMe", 
+            "url": "https://github.com/aerotron1/ISDB#readme"
+    },
+    "components": {
+        "schemas": [
+            {
+            "albums": {
+                "type": "object", 
+                "properties": {
+                    "AlbumId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "Title": {
+                        "type": "string"
+                    }, 
+                    "ArtistId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "required": ["AlbumId", "Title"],
+                "trim": ["Title"],
+                "example": {
+                    "AlbumId": 1,
+                    "Title": "For Those About To Rock We Salute You",
+                    "ArtistId": 1
+                }
+            }, 
+            "albumNotFound": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Unable to find Album"
+                }
+            }  
+        },
+        {
+            "artists": {
+                "type": "object", 
+                "properties": {
+                    "ArtistId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "Name": {
+                        "type": "string"
+                    }
+                },
+                "required": ["ArtistId", "Name"],
+                "trim": ["Name"],
+                "example": {
+                    "ArtistId": 1,
+                    "Name": "AC/DC"
+                }
+            }, 
+            "artistNotFound": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Unable to find Artist"
+                }
+            }
+        },
+                {
+            "genres": {
+                "type": "object", 
+                "properties": {
+                    "GenreId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "Name": {
+                        "type": "string"
+                    }
+                },
+                "required": ["GenreId", "Name"],
+                "trim": ["Name"],
+                "example": {
+                    "GenreId": 1,
+                    "Name": "Rock"
+                }
+            }, 
+            "genreNotFound": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Unable to find Genre"
+                }
+            }
+        },
+                {
+            "track": {
+                "type": "object", 
+                "properties": {
+                    "TrackId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "Name": {
+                        "type": "string"
+                    },
+                    "AlbumId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "GenreId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+
+                    "Composer": {
+                        "type": "string"
+                    }, 
+                    "Milliseconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "Bytes": {
+                        "type": "integer",
+                        "format": "int32"
+                    }, 
+                    "UnitPrice": {
+                        "type": "Number"
+                    }
+                },
+                "required": ["TrackId", "Name", "AlbumId", "GenreId", "Composer", "UnitPrice"],
+                "trim": ["Name", "Composer"],
+                "example": {
+                    "TrackId": 1,
+                    "Name": "For Those About To Rock",
+                    "AlbumId": 1,
+                    "GenreId": 1,
+                    "Composer": "Angus Young, Malcolm Young, Brian Johnson",
+                    "Milliseconds": "343719",
+                    "Bytes": 11170334,
+                    "UnitPrice": 0.99
+                }
+            }, 
+            "trackNotFound": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Unable to find Track"
+                }
+            }, 
+            "trackNotCreated": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Unable to create track record"
+                }
+        },
+            "trackNotFilled": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Fill Name ,AlbumId, GenreId, Composer, Milliseconds Bytes and UnitPrice"
+                }
+            }
+        },
+                {
+            "users": {
+                "type": "object", 
+                "properties": {
+                    "username": {
+                        "type": "String"
+                    }
+                },
+                "required": ["username"],
+                "trim": ["username"],
+                "example": {
+                    "id": 1,
+                    "username": "Bob"
+                }
+            }, 
+            "userAccepted": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Hello, Bob"
+                }
+            },
+            "userNotFound": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Invalid username or password"
+                }
+            }, 
+            "userNotEntered": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Enter username and password"
+                }
+            }
+        }
+    ]
+    },
+    "paths": [{
+        "/albums/{id}" : {
+            "get" : {
+                "description": "returns a single album",
+                "tags": ["albums"],
+                "parameters": [
+                    {
+                        "name": "AlbumId",
+                        "in": "path",
+                        "description": "ID of album to use",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/albums"
+                                }
+                            }
+                        }
+                    }, 
+                    "404": {
+                        "description": "Requested Resource Not Found", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/albumNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "/artists/{id}" : {
+            "get" : {
+                "description": "returns a single artist",
+                "tags": ["atists"],
+                "parameters": [
+                    {
+                        "name": "ArtistId",
+                        "in": "path",
+                        "description": "ID of artist to use",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/artists"
+                                }
+                            }
+                        }
+                    }, 
+                    "404": {
+                        "description": "Requested Resource Not Found", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/artistNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "/genres" : {
+            "get" : {
+                "description": "returns an array of genres",
+                "tags": ["genres"],
+                "parameters": [
+                    {
+                        "name": "GenreId",
+                        "in": "path",
+                        "description": "ID of genres to use",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                                        {
+                        "name": "Name",
+                        "in": "path",
+                        "description": "Name of genres to use",
+                        "required": true,
+                        "schema": {
+                            "type": "String"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/genres"
+                                }
+                            }
+                        }
+                    }, 
+                    "404": {
+                        "description": "Requested Resource Not Found", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/genreNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "/tracks/{id}" : {
+            "get" : {
+                "description": "returns a single track",
+                "tags": ["tracks"],
+                "parameters": [
+                    {
+                        "name": "TrackId",
+                        "in": "path",
+                        "description": "ID of track to use",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/tracks"
+                                }
+                            }
+                        }
+                    }, 
+                    "404": {
+                        "description": "Requested Resource Not Found", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/trackNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "/tracks" : {
+            "post" : {
+                "description": "Creates a new track",
+                "tags": ["tracks"],
+                "parameters": [
+                    {
+                        "name": "Name",
+                        "in": "path",
+                        "description": "Name of created track",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "AlbumId",
+                        "in": "path",
+                        "description": "ID of exiting Album",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }, 
+                    {
+                        "name": "GenreId",
+                        "in": "path",
+                        "description": "ID of existing Genre",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "Composer",
+                        "in": "path",
+                        "description": "Name of created composer",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Milliseconds",
+                        "in": "path",
+                        "description": "Name of created duration",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "Bytes",
+                        "in": "path",
+                        "description": "Name of created size",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "UnitPrice",
+                        "in": "path",
+                        "description": "Name of created UnitPrice",
+                        "required": true,
+                        "schema": {
+                            "type": "decimal"
+                        }
+                    }                   
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created track ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/tracks"
+                                }
+                            }
+                        }
+                    }, 
+                    "400": {
+                        "description": "Bad Request", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/trackNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "/login" : {
+            "post" : {
+                "description": "Processes user login",
+                "tags": ["users"],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "User credentials",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/login"
+                                }
+                            }
+                        }
+                    }, 
+                    "401": {
+                        "description": "Unauthorised", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "/register" : {
+            "post" : {
+                "description": "Processes registration",
+                "tags": ["users"],
+                "parameters": [
+                     {
+                        "name": "username",
+                        "in": "path",
+                        "description": "User credentials",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/register"
+                                }
+                            }
+                        }
+                    }, 
+                    "401": {
+                        "description": "Unauthorised", 
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/usersNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }]
+}
+ 
